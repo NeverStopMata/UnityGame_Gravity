@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityStandardAssets.Characters.ThirdPerson;
 public class GravityController : MonoBehaviour
 {
 
@@ -9,20 +9,27 @@ public class GravityController : MonoBehaviour
 
     [HideInInspector]
     public bool isChangingGravity = false;
+    private float changingProcess = 0.0f;
+    enum ChangingMode { rotate,revert}
+    public Vector3 originGravityDrct = new Vector3(0, -9.81f, 0);
+    
     public Vector3 targetGravityDrct = new Vector3(0, -9.81f, 0);
-    public Vector3 currentGravityDrct = new Vector3(0, -9.81f, 0);
     public GameObject player;
     public float gravityRotateSpeed = 3.0f;
     public float littleDifference = 0.5f;
     public Transform mainCamera_transform;
-
+    public bool canChangeGravityInAir = false;
+    private ChangingMode changeMode;
+    private ThirdPersonCharacter tpc;
     // Update is called once per frame
     void Start()
     {
         player = this.gameObject;
-        currentGravityDrct = Physics.gravity;
+        Physics.gravity = new Vector3(0, -9.81F, 0);
+        originGravityDrct = Physics.gravity;
         targetGravityDrct = Physics.gravity;
         littleDifference = 0.5f;
+        tpc = player.GetComponent<ThirdPersonCharacter>();
         if (mainCamera_transform == null)
         {
             mainCamera_transform = GameObject.FindGameObjectWithTag("MainCamera").transform;
@@ -34,61 +41,101 @@ public class GravityController : MonoBehaviour
     }
     void Update()
     {
+        
         if (isChangingGravity)
         {
             float step = gravityRotateSpeed * Time.deltaTime;
-            Vector3 lastGravityDrct = currentGravityDrct;
-            currentGravityDrct = Vector3.RotateTowards(lastGravityDrct, targetGravityDrct, step, 0.0f);
-            if (Vector3.Distance(currentGravityDrct, targetGravityDrct) < littleDifference)
+            changingProcess += step;
+            
+            if (changeMode == ChangingMode.rotate)
             {
-                //Debug.Log ("finish changing gravity!");
-                currentGravityDrct = targetGravityDrct;
-                isChangingGravity = false;
-            }
-            Physics.gravity = currentGravityDrct;
+                if (changingProcess > 1)
+                {
+                    changingProcess = 1;
+                    isChangingGravity = false;
+                }
+                Vector3 lastGravityDrct = Physics.gravity;
+                
+                 
+                Physics.gravity = Vector3.Slerp(originGravityDrct, targetGravityDrct, changingProcess);
 
-            player.transform.rotation = Quaternion.FromToRotation(lastGravityDrct, currentGravityDrct) * player.transform.rotation;
+                player.transform.rotation = Quaternion.FromToRotation(lastGravityDrct, Physics.gravity) * player.transform.rotation;
+            }
+            else if(changeMode == ChangingMode.revert)
+            {
+                player.transform.RotateAround(player.transform.position + player.transform.up * 1.2f, player.transform.right, 180.0f * step);//(new Vector3(1, 0, 0), 3.14f * step);
+
+                if (changingProcess > 1)
+                {
+                    changingProcess = 1;
+                    isChangingGravity = false;
+                    player.transform.rotation = Quaternion.FromToRotation(-player.transform.up, targetGravityDrct) * player.transform.rotation;
+                }
+                Physics.gravity = Vector3.Lerp(originGravityDrct, targetGravityDrct, changingProcess);
+                // Physics.gravity = Vector3.Slerp(originGravityDrct, targetGravityDrct, changingProcess);
+            }
+            
             //Debug.Log (player.transform.up);
 
         }
-        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.A))
+
+        
+        else if ((canChangeGravityInAir || tpc.m_IsGrounded) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.A))
         {
             //targetGravityDrct = getPlayerDrct(-Vector3.Cross(getPlayerDrct(player.transform.forward), currentGravityDrct));
-            targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.right, currentGravityDrct));
+            targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.right, Physics.gravity));
             isChangingGravity = true;
+            changeMode = ChangingMode.rotate;
         }
-        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.D))
+        else if ((canChangeGravityInAir || tpc.m_IsGrounded) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.D))
         {
             //targetGravityDrct = getPlayerDrct(Vector3.Cross(getPlayerDrct(player.transform.forward), currentGravityDrct));
-            targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.right, currentGravityDrct));
+            originGravityDrct = Physics.gravity;
+            targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.right, Physics.gravity));
             isChangingGravity = true;
+            changingProcess = 0;
+            changeMode = ChangingMode.rotate;
         }
-        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.W))
+        else if ((canChangeGravityInAir || tpc.m_IsGrounded) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.W))
         {
             //targetGravityDrct = getPlayerDrct(player.transform.forward);
-            if(currentGravityDrct.y != 0)
+            if (getPlayerDrct(Physics.gravity).y != 0)
             {
-                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.forward, currentGravityDrct));
+                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.forward, Physics.gravity));
             }
             else
             {
-                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.up, currentGravityDrct));
+                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.up, Physics.gravity));
             }
-            
+            originGravityDrct = Physics.gravity;
             isChangingGravity = true;
+            changingProcess = 0;
+            changeMode = ChangingMode.rotate;
         }
-        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.S))
+        else if ((canChangeGravityInAir || tpc.m_IsGrounded) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.S))
         {
             //targetGravityDrct = -getPlayerDrct(player.transform.forward);
-            if (currentGravityDrct.y != 0)
+            if (getPlayerDrct(Physics.gravity).y != 0)
             {
-                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.forward, currentGravityDrct));
+                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.forward, Physics.gravity));
             }
             else
             {
-                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.up, currentGravityDrct));
+                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.up, Physics.gravity));
             }
+            originGravityDrct = Physics.gravity;
             isChangingGravity = true;
+            changingProcess = 0;
+            changeMode = ChangingMode.rotate;
+        }
+        else if ((canChangeGravityInAir || tpc.m_IsGrounded) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.R))
+        {
+            //targetGravityDrct = getPlayerDrct(player.transform.forward);
+            originGravityDrct = getPlayerDrct(-Physics.gravity) * 0.3f;
+            targetGravityDrct = getPlayerDrct(-Physics.gravity);
+            isChangingGravity = true;
+            changingProcess = 0;
+            changeMode = ChangingMode.revert;
         }
 
         //Debug.Log (targetGravityDrct);

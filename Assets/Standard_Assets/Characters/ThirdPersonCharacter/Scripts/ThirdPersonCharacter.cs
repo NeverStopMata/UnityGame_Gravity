@@ -14,7 +14,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 		[SerializeField] float m_GroundCheckDistance = 0.1f;
 		Rigidbody m_Rigidbody;
 		Animator m_Animator;
-		bool m_IsGrounded;
+		public bool m_IsGrounded;
 		float m_OrigGroundCheckDistance;
 		const float k_Half = 0.5f;
 		float m_TurnAmount;
@@ -188,7 +188,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 
 			// 0.1f is a small offset to start the ray from inside the character
 			// it is also good to note that the transform position in the sample assets is at the base of the character
-			if (Physics.Raycast (transform.position + (this.gameObject.transform.up * 0.1f), -this.gameObject.transform.up, out hitInfo, m_GroundCheckDistance)) {
+			if (Physics.Raycast (transform.position + (this.gameObject.transform.up * 0.1f), Physics.gravity, out hitInfo, m_GroundCheckDistance)) {
 
 				m_GroundNormal = hitInfo.normal;
 				m_IsGrounded = true;
