@@ -54,13 +54,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 //Debug.Log("hello");
                 //m_CamForward = Vector3.Scale (m_Cam.forward, new Vector3 (1, 0, 1)).normalized;
                 //m_Move = v*m_CamForward + h*m_Cam.right; //mata change the moving direction calculation.
+                Vector3 cam2player = Vector3.Normalize(transform.position - m_Cam.position);
                 if (Mathf.Abs(transform.up.y) > 0.8f)
                 {
-                    m_Move = v * Vector3.Normalize(Vector3.ProjectOnPlane(m_Cam.forward, transform.up)) + h * Vector3.Normalize(Vector3.ProjectOnPlane(m_Cam.right, transform.up));
+                    m_Move = v * Vector3.Normalize(Vector3.ProjectOnPlane(cam2player, transform.up)) - h * Vector3.Normalize(Vector3.ProjectOnPlane(Vector3.Cross(cam2player,Vector3.up), transform.up));
                 }
                 else
                 {
-                    m_Move = v * Vector3.Normalize(Vector3.ProjectOnPlane(m_Cam.up, transform.up)) + h * Vector3.Normalize(Vector3.ProjectOnPlane(m_Cam.right, transform.up));
+                    m_Move = v * Vector3.up + h * Vector3.Normalize(Vector3.ProjectOnPlane(Vector3.Cross(cam2player, Vector3.up), transform.up));
                 }
 
                 //m_Move = v * this.gameObject.transform.forward + h * this.gameObject.transform.right;
@@ -69,7 +70,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 // we use world-relative directions in the case of no main camera
 
-                m_Move = v * Vector3.forward + h * Vector3.right;
+                //m_Move = v * Vector3.forward + h * Vector3.right;
             }
 #if !MOBILE_INPUT
             // walk speed multiplier
