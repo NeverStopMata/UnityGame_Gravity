@@ -85,7 +85,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 				m_Crouching = true;
 			} else {
 				Ray crouchRay = new Ray (m_Rigidbody.position + transform.up * m_Capsule.radius * k_Half, transform.up);
-				float crouchRayLength = m_CapsuleHeight - m_Capsule.radius * k_Half;
+				float crouchRayLength = m_CapsuleHeight * k_Half - m_Capsule.radius * k_Half;
 				if (Physics.SphereCast (crouchRay, m_Capsule.radius * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
 					//Debug.Log ("dun");
 					m_Crouching = true;
@@ -101,7 +101,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			// prevent standing up in crouch-only zones
 			if (!m_Crouching) {
 				Ray crouchRay = new Ray (m_Rigidbody.position + transform.up * m_Capsule.radius * k_Half, transform.up);
-				float crouchRayLength = m_CapsuleHeight - m_Capsule.radius * k_Half;
+				float crouchRayLength = m_CapsuleHeight * k_Half - m_Capsule.radius * k_Half;
 				if (Physics.SphereCast (crouchRay, m_Capsule.radius * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
 					//ebug.Log ("dun");
 					m_Crouching = true;

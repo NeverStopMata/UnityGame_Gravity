@@ -45,6 +45,7 @@ public class GravityController : MonoBehaviour
     {
         float x = CrossPlatformInputManager.GetAxis("Mouse X");
         float y = CrossPlatformInputManager.GetAxis("Mouse Y");
+        Vector3 cam2player = Vector3.Normalize(transform.position - mainCamera_transform.position);
         if (isChangingGravity)
         {
             float step = gravityRotateSpeed * Time.deltaTime;
@@ -82,116 +83,16 @@ public class GravityController : MonoBehaviour
 
         }
 
-
-
-
-        //else if ((canChangeGravityInAir || tpc.m_IsGrounded) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.A))
-        //{
-        //    //targetGravityDrct = getPlayerDrct(-Vector3.Cross(getPlayerDrct(player.transform.forward), currentGravityDrct));
-        //    targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.right, Physics.gravity));
-        //    isChangingGravity = true;
-        //    changeMode = ChangingMode.rotate;
-        //}
-        //else if ((canChangeGravityInAir || tpc.m_IsGrounded) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.D))
-        //{
-        //    //targetGravityDrct = getPlayerDrct(Vector3.Cross(getPlayerDrct(player.transform.forward), currentGravityDrct));
-        //    originGravityDrct = Physics.gravity;
-        //    targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.right, Physics.gravity));
-        //    isChangingGravity = true;
-        //    changingProcess = 0;
-        //    changeMode = ChangingMode.rotate;
-        //}
-        //else if ((canChangeGravityInAir || tpc.m_IsGrounded) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.W))
-        //{
-        //    //targetGravityDrct = getPlayerDrct(player.transform.forward);
-        //    if (getPlayerDrct(Physics.gravity).y != 0)
-        //    {
-        //        targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.forward, Physics.gravity));
-        //    }
-        //    else
-        //    {
-        //        targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.up, Physics.gravity));
-        //    }
-        //    originGravityDrct = Physics.gravity;
-        //    isChangingGravity = true;
-        //    changingProcess = 0;
-        //    changeMode = ChangingMode.rotate;
-        //}
-        //else if ((canChangeGravityInAir || tpc.m_IsGrounded) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.S))
-        //{
-        //    //targetGravityDrct = -getPlayerDrct(player.transform.forward);
-        //    if (getPlayerDrct(Physics.gravity).y != 0)
-        //    {
-        //        targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.forward, Physics.gravity));
-        //    }
-        //    else
-        //    {
-        //        targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.up, Physics.gravity));
-        //    }
-        //    originGravityDrct = Physics.gravity;
-        //    isChangingGravity = true;
-        //    changingProcess = 0;
-        //    changeMode = ChangingMode.rotate;
-        //}
-        //else if ((canChangeGravityInAir || tpc.m_IsGrounded) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.R))
-        //{
-        //    //targetGravityDrct = getPlayerDrct(player.transform.forward);
-        //    originGravityDrct = getPlayerDrct(-Physics.gravity) * 0.3f;
-        //    targetGravityDrct = getPlayerDrct(-Physics.gravity);
-        //    isChangingGravity = true;
-        //    changingProcess = 0;
-        //    changeMode = ChangingMode.revert;
-        //}
-
-        else if ((canChangeGravityInAir || tpc.m_IsGrounded) && getSlideDrctFromAxis(x,y) == slideDrct.leftSlide)
-        {
-            //targetGravityDrct = getPlayerDrct(-Vector3.Cross(getPlayerDrct(player.transform.forward), currentGravityDrct));
-            targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.right, Physics.gravity));
-            isChangingGravity = true;
-            changeMode = ChangingMode.rotate;
-        }
-        else if ((canChangeGravityInAir || tpc.m_IsGrounded) && getSlideDrctFromAxis(x, y) == slideDrct.righSlide)
-        {
-            //targetGravityDrct = getPlayerDrct(Vector3.Cross(getPlayerDrct(player.transform.forward), currentGravityDrct));
-            originGravityDrct = Physics.gravity;
-            targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.right, Physics.gravity));
-            isChangingGravity = true;
-            changingProcess = 0;
-            changeMode = ChangingMode.rotate;
-        }
         else if ((canChangeGravityInAir || tpc.m_IsGrounded) && getSlideDrctFromAxis(x,y) == slideDrct.upSlide)
-        {
-            //targetGravityDrct = getPlayerDrct(player.transform.forward);
-            if (getPlayerDrct(Physics.gravity).y != 0)
-            {
-                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.forward, Physics.gravity));
-            }
-            else
-            {
-                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(mainCamera_transform.up, Physics.gravity));
-            }
+        {      
+            targetGravityDrct = getPlayerDrct(player.transform.forward);
             originGravityDrct = Physics.gravity;
             isChangingGravity = true;
             changingProcess = 0;
             changeMode = ChangingMode.rotate;
         }
+
         else if ((canChangeGravityInAir || tpc.m_IsGrounded) && getSlideDrctFromAxis(x, y) == slideDrct.downSlide)
-        {
-            //targetGravityDrct = -getPlayerDrct(player.transform.forward);
-            if (getPlayerDrct(Physics.gravity).y != 0)
-            {
-                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.forward, Physics.gravity));
-            }
-            else
-            {
-                targetGravityDrct = getPlayerDrct(Vector3.ProjectOnPlane(-mainCamera_transform.up, Physics.gravity));
-            }
-            originGravityDrct = Physics.gravity;
-            isChangingGravity = true;
-            changingProcess = 0;
-            changeMode = ChangingMode.rotate;
-        }
-        else if ((canChangeGravityInAir || tpc.m_IsGrounded) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.R))
         {
             //targetGravityDrct = getPlayerDrct(player.transform.forward);
             originGravityDrct = getPlayerDrct(-Physics.gravity) * 0.3f;
@@ -240,23 +141,26 @@ public class GravityController : MonoBehaviour
     }
     slideDrct getSlideDrctFromAxis(float x, float y)
     {
-        if (x == 0.0f && y == 0.0f)
+        
+        if (Mathf.Abs(x) <= 0.5f && Mathf.Abs(y) <= 0.5f)
         {
             return slideDrct.noSlide;
         }
+
         else if (Mathf.Abs(x) < y)
         {
             return slideDrct.upSlide;
         }
+
         else if (-Mathf.Abs(x) > y)
         {
             return slideDrct.downSlide;
         }
-        else if (Mathf.Abs(y)<x)
+        else if (Mathf.Abs(y) < x)
         {
             return slideDrct.righSlide;
         }
-        else if(-Mathf.Abs(y)>x)
+        else if (-Mathf.Abs(y) > x)
         {
             return slideDrct.leftSlide;
         }

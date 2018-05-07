@@ -161,7 +161,7 @@ namespace GoogleARCore.HelloAR
                     cameraPositionSameY.y = hit.Pose.position.y;
 
                     // Have Andy look toward the camera respecting his "up" perspective, which may be from ceiling.
-                    andyObject.transform.LookAt(cameraPositionSameY, andyObject.transform.up);
+                    //andyObject.transform.LookAt(cameraPositionSameY, andyObject.transform.up);
                 }
 
                 // Make Andy model a child of the anchor.
