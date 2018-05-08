@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axesToUse: 0
-  controlStyle: 0
+  controlStyle: 1
   horizontalAxisName: Horizontal
   verticalAxisName: Vertical
   Xsensitivity: 1

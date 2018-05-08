@@ -33,7 +33,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			m_CapsuleCenter = m_Capsule.center;
 
 			m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-            m_GroundCheckDistance = gameObject.GetComponent<CapsuleCollider>().height * 0.05f * transform.localScale.x;
+            m_GroundCheckDistance = 0.03f;// gameObject.GetComponent<CapsuleCollider>().height * 0.05f * transform.localScale.x;
             m_OrigGroundCheckDistance = m_GroundCheckDistance;
         }
 
