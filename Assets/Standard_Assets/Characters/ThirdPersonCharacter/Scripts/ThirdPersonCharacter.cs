@@ -11,7 +11,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 		[SerializeField] float m_RunCycleLegOffset = 0.2f; //specific to the character in sample assets, will need to be modified to work with others
 		[SerializeField] float m_MoveSpeedMultiplier = 1f;
 		[SerializeField] float m_AnimSpeedMultiplier = 1f;
-		[SerializeField] float m_GroundCheckDistance = 0.1f;
+		float m_GroundCheckDistance = 0.01f;
 		Rigidbody m_Rigidbody;
 		Animator m_Animator;
 		public bool m_IsGrounded;
@@ -33,8 +33,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			m_CapsuleCenter = m_Capsule.center;
 
 			m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-			m_OrigGroundCheckDistance = m_GroundCheckDistance;
-		}
+            m_GroundCheckDistance = gameObject.GetComponent<CapsuleCollider>().height * 0.05f * transform.localScale.x;
+            m_OrigGroundCheckDistance = m_GroundCheckDistance;
+        }
 
 		public void Move (Vector3 move, bool crouch, bool jump) {
 
@@ -45,15 +46,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			if (move.magnitude > 0.1f) {
 				//Debug.Log ("world space move direction:" + move);
 			}
-			//Debug.Log ("wolrd move:" + move);
-
-			move = transform.InverseTransformDirection (move);
+            //Debug.Log ("wolrd move:" + move);
+            CheckGroundStatus();
+            move = Vector3.ProjectOnPlane(move, m_GroundNormal);
+            move = transform.InverseTransformDirection (move);
 			//move = Quaternion.FromToRotation (transform.up, Vector3.up) * move;
 			// if (move.magnitude > 0.1f) {
 			// 	Debug.Log ("local space move direction:" + move);
 			// }
-			CheckGroundStatus ();
-			//move = Vector3.ProjectOnPlane (move, m_GroundNormal);
+			
 			//Debug.Log ("local move:" + move);
 			// if (move.magnitude > 0.1f) {
 			// 	Debug.Log ("ground normal:" + m_GroundNormal);
@@ -84,9 +85,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 				m_Capsule.center = m_Capsule.center / 2f;
 				m_Crouching = true;
 			} else {
-				Ray crouchRay = new Ray (m_Rigidbody.position + transform.up * m_Capsule.radius * k_Half, transform.up);
-				float crouchRayLength = m_CapsuleHeight * k_Half - m_Capsule.radius * k_Half;
-				if (Physics.SphereCast (crouchRay, m_Capsule.radius * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
+				Ray crouchRay = new Ray (m_Rigidbody.position + transform.up * m_Capsule.radius * transform.localScale.y * k_Half, transform.up);
+				float crouchRayLength = m_CapsuleHeight - m_Capsule.radius * k_Half;
+                crouchRayLength *= transform.localScale.y;
+                Debug.DrawLine(crouchRay.origin, crouchRay.origin + crouchRay.direction * crouchRayLength,Color.green);
+
+                if (Physics.SphereCast (crouchRay, m_Capsule.radius * transform.localScale.x * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
 					//Debug.Log ("dun");
 					m_Crouching = true;
 					return;
@@ -100,10 +104,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 		void PreventStandingInLowHeadroom () {
 			// prevent standing up in crouch-only zones
 			if (!m_Crouching) {
-				Ray crouchRay = new Ray (m_Rigidbody.position + transform.up * m_Capsule.radius * k_Half, transform.up);
-				float crouchRayLength = m_CapsuleHeight * k_Half - m_Capsule.radius * k_Half;
-				if (Physics.SphereCast (crouchRay, m_Capsule.radius * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
-					//ebug.Log ("dun");
+				Ray crouchRay = new Ray (m_Rigidbody.position + transform.up * m_Capsule.radius * transform.localScale.y * k_Half, transform.up);
+				float crouchRayLength = m_CapsuleHeight - m_Capsule.radius * k_Half;
+                crouchRayLength *= transform.localScale.y;
+                if (Physics.SphereCast (crouchRay, m_Capsule.radius * transform.localScale.x * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
+					//ebug.Log ("dun"); * transform.localScale.x 
 					m_Crouching = true;
 				}
 			}
@@ -156,7 +161,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 				//mata add "m_Rigidbody.velocity.y "
 				m_IsGrounded = false;
 				m_Animator.applyRootMotion = false;
-				m_GroundCheckDistance = 0.1f;
+				m_GroundCheckDistance = 0.01f;
 			}
 		}
 
@@ -188,7 +193,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 
 			// 0.1f is a small offset to start the ray from inside the character
 			// it is also good to note that the transform position in the sample assets is at the base of the character
-			if (Physics.Raycast (transform.position + (this.gameObject.transform.up * 0.1f), Physics.gravity, out hitInfo, m_GroundCheckDistance)) {
+			if (Physics.Raycast (transform.position + (this.gameObject.transform.up * m_GroundCheckDistance * 0.8f), Physics.gravity, out hitInfo, m_GroundCheckDistance)) {
 
 				m_GroundNormal = hitInfo.normal;
 				m_IsGrounded = true;

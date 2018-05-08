@@ -43,7 +43,7 @@ namespace UnityStandardAssets.Cameras {
                 Cursor.lockState = m_LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
                 Cursor.visible = !m_LockCursor;
             }
-            this.transform.GetChild (0).position = this.transform.position + Target.up;
+            this.transform.GetChild (0).position = this.transform.position + Target.up * m_Target.localScale.y;
             
             //Debug.Log (this.transform.up);
         }
@@ -57,7 +57,7 @@ namespace UnityStandardAssets.Cameras {
             if (m_Target == null) return;
             // Move the rig towards target position.
             transform.position = Vector3.Lerp (transform.position, m_Target.position, deltaTime * m_MoveSpeed);
-            //Debug.DrawLine (m_Target.position, new Vector3 (0, 0, 0), Color.red);
+            Debug.DrawLine (m_Target.position, new Vector3 (0, 0, 0), Color.red);
         }
 
         private void HandleRotationMovement () {

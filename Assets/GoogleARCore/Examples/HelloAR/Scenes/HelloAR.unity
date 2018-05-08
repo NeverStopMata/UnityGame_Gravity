@@ -155,67 +155,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c10877f7cd5764de18d46d7b777d1faa, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &627916101
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 627916102}
-  - component: {fileID: 627916103}
-  m_Layer: 0
-  m_Name: Example Controller
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &627916102
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 627916101}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &627916103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 627916101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26074b15f9c13404d858bfedb8b8c00c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FirstPersonCamera: {fileID: 896679035}
-  TrackedPlanePrefab: {fileID: 1654175882956584, guid: 6a35c744e5010405c847fad90282d2be,
-    type: 2}
-  AndyAndroidPrefab: {fileID: 1952586553816366, guid: cb98c10eff87ab54e803ed894d2f3078,
-    type: 2}
-  dualTouchControls: {fileID: 896679031}
---- !u!1 &896679031 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 100000, guid: 2169821f0567671499a5c10104c69c24, type: 2}
-  m_PrefabInternal: {fileID: 989943869}
---- !u!20 &896679035 stripped
-Camera:
-  m_PrefabParentObject: {fileID: 20155940112608238, guid: c10877f7cd5764de18d46d7b777d1faa,
-    type: 2}
-  m_PrefabInternal: {fileID: 97747990}
---- !u!224 &896679036 stripped
-RectTransform:
-  m_PrefabParentObject: {fileID: 22400000, guid: 2169821f0567671499a5c10104c69c24,
-    type: 2}
-  m_PrefabInternal: {fileID: 989943869}
---- !u!1001 &989943869
+--- !u!1001 &350941766
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -294,37 +234,73 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 100006, guid: 2169821f0567671499a5c10104c69c24, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 100008, guid: 2169821f0567671499a5c10104c69c24, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 100010, guid: 2169821f0567671499a5c10104c69c24, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 22400000, guid: 2169821f0567671499a5c10104c69c24, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 22400000, guid: 2169821f0567671499a5c10104c69c24, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 22400000, guid: 2169821f0567671499a5c10104c69c24, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 2169821f0567671499a5c10104c69c24, type: 2}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_Name
+      value: TouchControls
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2169821f0567671499a5c10104c69c24, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &627916101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 627916102}
+  - component: {fileID: 627916103}
+  m_Layer: 0
+  m_Name: Example Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &627916102
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 627916101}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &627916103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 627916101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26074b15f9c13404d858bfedb8b8c00c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FirstPersonCamera: {fileID: 896679035}
+  TrackedPlanePrefab: {fileID: 1654175882956584, guid: 6a35c744e5010405c847fad90282d2be,
+    type: 2}
+  AndyAndroidPrefab: {fileID: 1662092911067106, guid: 96fa11973c6cf2f46912e40872c225d5,
+    type: 2}
+  dualTouchControls: {fileID: 896679031}
+--- !u!1 &896679031 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100000, guid: 2169821f0567671499a5c10104c69c24, type: 2}
+  m_PrefabInternal: {fileID: 350941766}
+--- !u!20 &896679035 stripped
+Camera:
+  m_PrefabParentObject: {fileID: 20155940112608238, guid: c10877f7cd5764de18d46d7b777d1faa,
+    type: 2}
+  m_PrefabInternal: {fileID: 97747990}
+--- !u!224 &896679036 stripped
+RectTransform:
+  m_PrefabParentObject: {fileID: 22400000, guid: 2169821f0567671499a5c10104c69c24,
+    type: 2}
+  m_PrefabInternal: {fileID: 350941766}
 --- !u!1 &1233457656
 GameObject:
   m_ObjectHideFlags: 0

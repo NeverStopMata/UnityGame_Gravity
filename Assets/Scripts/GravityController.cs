@@ -10,19 +10,19 @@ public class GravityController : MonoBehaviour
 
     [HideInInspector]
     public bool isChangingGravity = false;
-    private float changingProcess = 0.0f;
+    private float changingProcess = 0.0f;//
     enum ChangingMode { rotate, revert }
     public Vector3 originGravityDrct = new Vector3(0, -9.81f, 0);
 
     public Vector3 targetGravityDrct = new Vector3(0, -9.81f, 0);
-    public GameObject player;
     public float gravityRotateSpeed = 3.0f;
-    public float littleDifference = 0.5f;
     public Transform mainCamera_transform;
     public bool canChangeGravityInAir = false;
+    private GameObject player;
     private ChangingMode changeMode;
     private ThirdPersonCharacter tpc;
     private enum slideDrct { upSlide, downSlide, leftSlide, righSlide, noSlide }
+    private CapsuleCollider plrCapsule;
     // Update is called once per frame
     void Start()
     {
@@ -30,21 +30,26 @@ public class GravityController : MonoBehaviour
         Physics.gravity = new Vector3(0, -9.81F, 0);
         originGravityDrct = Physics.gravity;
         targetGravityDrct = Physics.gravity;
-        littleDifference = 0.5f;
         tpc = player.GetComponent<ThirdPersonCharacter>();
         if (mainCamera_transform == null)
         {
             mainCamera_transform = GameObject.FindGameObjectWithTag("MainCamera").transform;
         }
 
+        plrCapsule = gameObject.GetComponent<CapsuleCollider>();
         //dsada
 
 
     }
-    void Update()
+    private void FixedUpdate()
     {
         float x = CrossPlatformInputManager.GetAxis("Mouse X");
         float y = CrossPlatformInputManager.GetAxis("Mouse Y");
+        if(x!=0||y!=0)
+        {
+            CrossPlatformInputManager.SetAxis("Mouse X", 0.0f);
+            CrossPlatformInputManager.SetAxis("Mouse Y", 0.0f);
+        }
         Vector3 cam2player = Vector3.Normalize(transform.position - mainCamera_transform.position);
         if (isChangingGravity)
         {
@@ -58,7 +63,7 @@ public class GravityController : MonoBehaviour
                     changingProcess = 1;
                     isChangingGravity = false;
                 }
-                Vector3 lastGravityDrct = Physics.gravity;
+                Vector3 lastGravityDrct = Physics.gravity;//
 
 
                 Physics.gravity = Vector3.Slerp(originGravityDrct, targetGravityDrct, changingProcess);
@@ -67,7 +72,7 @@ public class GravityController : MonoBehaviour
             }
             else if (changeMode == ChangingMode.revert)
             {
-                player.transform.RotateAround(player.transform.position + player.transform.up * 1.2f, player.transform.right, 180.0f * step);//(new Vector3(1, 0, 0), 3.14f * step);
+                player.transform.RotateAround(player.transform.position + player.transform.up  * plrCapsule.height * transform.localScale.y, player.transform.right, 180.0f * step);//(new Vector3(1, 0, 0), 3.14f * step);
 
                 if (changingProcess > 1)
                 {
@@ -141,13 +146,9 @@ public class GravityController : MonoBehaviour
     }
     slideDrct getSlideDrctFromAxis(float x, float y)
     {
-        
-        if (Mathf.Abs(x) <= 0.5f && Mathf.Abs(y) <= 0.5f)
-        {
-            return slideDrct.noSlide;
-        }
 
-        else if (Mathf.Abs(x) < y)
+       // return slideDrct.downSlide;
+        if (Mathf.Abs(x) < y)
         {
             return slideDrct.upSlide;
         }
@@ -156,14 +157,14 @@ public class GravityController : MonoBehaviour
         {
             return slideDrct.downSlide;
         }
-        else if (Mathf.Abs(y) < x)
-        {
-            return slideDrct.righSlide;
-        }
-        else if (-Mathf.Abs(y) > x)
-        {
-            return slideDrct.leftSlide;
-        }
+        //else if (Mathf.Abs(y) < x)
+        //{
+        //    return slideDrct.righSlide;
+        //}
+        //else if (-Mathf.Abs(y) > x)
+        //{
+        //    return slideDrct.leftSlide;
+        //}
         else
         {
             return slideDrct.noSlide;
