@@ -58,7 +58,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 if (Mathf.Abs(transform.up.y) > 0.8f)
                 {
                     //m_Move = v * Vector3.Normalize(Vector3.ProjectOnPlane(cam2player, transform.up)) - h * Vector3.Normalize(Vector3.ProjectOnPlane(Vector3.Cross(cam2player,Vector3.up), transform.up));
-                    m_Move = v * Vector3.Normalize(cam2player) - h * Vector3.Normalize(Vector3.Cross(cam2player, Vector3.up));
+
+                    Vector3 _camRight = Vector3.Normalize(Vector3.Cross(cam2player, Vector3.up));
+                    m_Move = v * Vector3.Normalize(Vector3.Cross(_camRight,cam2player)) - h * _camRight;
 
                 }//dsa
                 else
