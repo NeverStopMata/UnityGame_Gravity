@@ -33,7 +33,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			m_CapsuleCenter = m_Capsule.center;
 
 			m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-            m_GroundCheckDistance = 0.03f;// gameObject.GetComponent<CapsuleCollider>().height * 0.05f * transform.localScale.x;
+            m_GroundCheckDistance = 0.01f;// gameObject.GetComponent<CapsuleCollider>().height * 0.05f * transform.localScale.x;
             m_OrigGroundCheckDistance = m_GroundCheckDistance;
         }
 
@@ -48,7 +48,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			}
             //Debug.Log ("wolrd move:" + move);
             CheckGroundStatus();
-            move = Vector3.ProjectOnPlane(move, m_GroundNormal);
+            move = Vector3.ProjectOnPlane(move, m_GroundNormal).normalized;
             move = transform.InverseTransformDirection (move);
 			//move = Quaternion.FromToRotation (transform.up, Vector3.up) * move;
 			// if (move.magnitude > 0.1f) {
@@ -59,14 +59,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			// if (move.magnitude > 0.1f) {
 			// 	Debug.Log ("ground normal:" + m_GroundNormal);
 			// }
-			m_TurnAmount = Mathf.Atan2 (move.x, move.z);
-			m_ForwardAmount = move.z;
-
-			ApplyExtraTurnRotation ();
+			
 
 			// control and velocity handling is different when grounded and airborne:
 			if (m_IsGrounded) {
-				HandleGroundedMovement (crouch, jump);
+                m_TurnAmount = Mathf.Atan2(move.x, move.z);
+                m_ForwardAmount = move.z;
+                ApplyExtraTurnRotation();
+
+                HandleGroundedMovement (crouch, jump);
 			} else {
 				HandleAirborneMovement ();
 			}
@@ -151,7 +152,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			m_Rigidbody.AddForce (extraGravityForce);
 			gravityDrct = -this.gameObject.transform.up;
 			m_GroundCheckDistance = Vector3.Dot (m_Rigidbody.velocity, Vector3.Normalize (gravityDrct)) > 0 ? m_OrigGroundCheckDistance : 0.01f;
-		}
+        }
 
 		void HandleGroundedMovement (bool crouch, bool jump) {
 			// check whether conditions are right to allow a jump:
@@ -188,12 +189,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			RaycastHit hitInfo;
 #if UNITY_EDITOR
 			// helper to visualise the ground check ray in the scene view
-			//Debug.DrawLine (transform.position + (this.gameObject.transform.up * 0.1f), transform.position + (this.gameObject.transform.up * 0.1f) - this.gameObject.transform.up * m_GroundCheckDistance);
+			Debug.DrawLine (transform.position + (this.gameObject.transform.up * m_GroundCheckDistance * 0.3f), transform.position - this.gameObject.transform.up * m_GroundCheckDistance);
 #endif
 
 			// 0.1f is a small offset to start the ray from inside the character
 			// it is also good to note that the transform position in the sample assets is at the base of the character
-			if (Physics.Raycast (transform.position + (this.gameObject.transform.up * m_GroundCheckDistance * 0.8f), Physics.gravity, out hitInfo, m_GroundCheckDistance)) {
+			if (Physics.Raycast (transform.position + (this.gameObject.transform.up * m_GroundCheckDistance * 0.3f), Physics.gravity, out hitInfo, m_GroundCheckDistance * 1.3f)) {
 
 				m_GroundNormal = hitInfo.normal;
 				m_IsGrounded = true;
