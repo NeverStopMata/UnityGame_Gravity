@@ -24,6 +24,7 @@ namespace GoogleARCore.HelloAR
     using GoogleARCore;
     using UnityEngine;
     using UnityEngine.Rendering;
+    using UnityStandardAssets.CrossPlatformInput;
 
 #if UNITY_EDITOR
     // Set up touch input propagation while using Instant Preview in the editor.
@@ -55,7 +56,7 @@ namespace GoogleARCore.HelloAR
         /// </summary>
         //public GameObject SearchingForPlaneUI;
 
-        public GameObject dualTouchControls;
+        public GameObject TouchControls;
         /// <summary>
         /// A list to hold new planes ARCore began tracking in the current frame. This object is used across
         /// the application to avoid per-frame allocations.
@@ -73,6 +74,7 @@ namespace GoogleARCore.HelloAR
         /// </summary>
         private bool m_IsQuitting = false;
         private bool m_hasCreateBattle = false;
+        private GameObject battleGO;
 
         /// <summary>
         /// The Unity Update() method.
@@ -80,7 +82,7 @@ namespace GoogleARCore.HelloAR
         /// </summary>
         private void Start()
         {
-            dualTouchControls.SetActive(false);
+            TouchControls.SetActive(false);
         }
         public void Update()
         {
@@ -90,6 +92,16 @@ namespace GoogleARCore.HelloAR
                 Application.Quit();
             }
 
+            if(CrossPlatformInputManager.GetButtonDown("Restart"))
+            {
+                //Application.Quit();
+                m_hasCreateBattle = false;
+                TouchControls.SetActive(false);
+                if(battleGO != null)
+                {
+                    DestroyImmediate(battleGO);
+                }
+            }
             _QuitOnConnectionErrors();
 
             // Check that motion tracking is tracking.
@@ -145,9 +157,10 @@ namespace GoogleARCore.HelloAR
             TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
                 TrackableHitFlags.FeaturePointWithSurfaceNormal;
 
+
             if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit) && !m_hasCreateBattle)
             {
-                var battleGO = Instantiate(AndyAndroidPrefab, hit.Pose.position, hit.Pose.rotation);
+                battleGO = Instantiate(AndyAndroidPrefab, hit.Pose.position, hit.Pose.rotation);
                 
                 // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
                 // world evolves.
@@ -168,7 +181,7 @@ namespace GoogleARCore.HelloAR
                 // Make Andy model a child of the anchor.
                 battleGO.transform.parent = anchor.transform;
                 m_hasCreateBattle = true;
-                dualTouchControls.SetActive(true);
+                TouchControls.SetActive(true);
                 //dualTouchControls = (GameObject)Instantiate(Resources.Load("Standard_Assets/CrossPlatformInput/Prefabs/DualTouchControls"));
             }
         }
