@@ -50,22 +50,22 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
             CheckGroundStatus();
             move = Vector3.ProjectOnPlane(move, m_GroundNormal).normalized;
             move = transform.InverseTransformDirection (move);
-			//move = Quaternion.FromToRotation (transform.up, Vector3.up) * move;
-			// if (move.magnitude > 0.1f) {
-			// 	Debug.Log ("local space move direction:" + move);
-			// }
-			
-			//Debug.Log ("local move:" + move);
-			// if (move.magnitude > 0.1f) {
-			// 	Debug.Log ("ground normal:" + m_GroundNormal);
-			// }
-			
+            //move = Quaternion.FromToRotation (transform.up, Vector3.up) * move;
+            // if (move.magnitude > 0.1f) {
+            // 	Debug.Log ("local space move direction:" + move);
+            // }
 
-			// control and velocity handling is different when grounded and airborne:
-			if (m_IsGrounded) {
-                m_TurnAmount = Mathf.Atan2(move.x, move.z);
-                m_ForwardAmount = move.z;
-                ApplyExtraTurnRotation();
+            //Debug.Log ("local move:" + move);
+            // if (move.magnitude > 0.1f) {
+            // 	Debug.Log ("ground normal:" + m_GroundNormal);
+            // }
+
+            m_TurnAmount = Mathf.Atan2(move.x, move.z);
+            m_ForwardAmount = move.z;
+            ApplyExtraTurnRotation();
+            // control and velocity handling is different when grounded and airborne:
+            if (m_IsGrounded) {
+                
 
                 HandleGroundedMovement (crouch, jump);
 			} else {
@@ -151,7 +151,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			Vector3 extraGravityForce = (Physics.gravity * m_GravityMultiplier) - Physics.gravity;
 			m_Rigidbody.AddForce (extraGravityForce);
 			gravityDrct = -this.gameObject.transform.up;
-			m_GroundCheckDistance = Vector3.Dot (m_Rigidbody.velocity, Vector3.Normalize (gravityDrct)) > 0 ? m_OrigGroundCheckDistance : 0.01f;
+			m_GroundCheckDistance = Vector3.Dot (m_Rigidbody.velocity, Vector3.Normalize (gravityDrct)) > 0.1 ? m_OrigGroundCheckDistance : 0.01f;
+            //m_GroundCheckDistance = 0.01f;
         }
 
 		void HandleGroundedMovement (bool crouch, bool jump) {
