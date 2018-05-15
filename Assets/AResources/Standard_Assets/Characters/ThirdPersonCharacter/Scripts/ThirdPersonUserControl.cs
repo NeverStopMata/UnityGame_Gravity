@@ -58,23 +58,26 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 //Debug.Log("hello");
                 //m_CamForward = Vector3.Scale (m_Cam.forward, new Vector3 (1, 0, 1)).normalized;
                 //m_Move = v*m_CamForward + h*m_Cam.right; //mata change the moving direction calculation.
-                Vector3 cam2player = Vector3.Normalize(transform.position - m_Cam.position);
+                Vector3 _camForward = Vector3.Normalize(transform.position - m_Cam.position);
+                _camForward = m_Cam.forward;
+                Vector3 _camRight = Vector3.Normalize(Vector3.Cross(_camForward, Vector3.up));
+                _camRight = m_Cam.right;
                 if (transform.up.y < -0.8f)
                 {
                     //m_Move = v * Vector3.Normalize(Vector3.ProjectOnPlane(cam2player, transform.up)) - h * Vector3.Normalize(Vector3.ProjectOnPlane(Vector3.Cross(cam2player,Vector3.up), transform.up));
 
-                    Vector3 _camRight = Vector3.Normalize(Vector3.Cross(cam2player, Vector3.up));
-                    m_Move = v * Vector3.Normalize(Vector3.Cross(_camRight,cam2player)) - h * _camRight;
+                   
+                    //m_Move = v * Vector3.Normalize(Vector3.Cross(_camRight,cam2player)) - h * _camRight;
+                    m_Move = v * Vector3.Normalize(Vector3.Cross(_camRight,_camForward)) + h * _camRight;
 
                 }//player on the ceil
                 else if(transform.up.y > 0.8f)
-                {
-                    Vector3 _camRight = Vector3.Normalize(Vector3.Cross(cam2player, Vector3.up));
-                    m_Move = v * cam2player - h * _camRight;
+                { 
+                    m_Move = v * _camForward + h * _camRight;
                 }//player on the floor
                 else
                 {
-                    m_Move = v * Vector3.up - h * Vector3.Normalize(Vector3.Cross(cam2player, Vector3.up));
+                    m_Move = v * Vector3.up + h * Vector3.Normalize(Vector3.Cross(_camForward, Vector3.up));
                     // m_Move = v * Vector3.up - h * Vector3.Normalize(Vector3.ProjectOnPlane(Vector3.Cross(cam2player, Vector3.up), transform.up));
 
                 }//player on the wall

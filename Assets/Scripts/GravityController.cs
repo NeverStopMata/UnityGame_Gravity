@@ -80,7 +80,7 @@ public class GravityController : MonoBehaviour
 
 
                 //player.transform.rotation = Quaternion.FromToRotation(lastGravityDrct, Physics.gravity) * player.transform.rotation;
-                player.transform.rotation = Quaternion.FromToRotation(lastGravityDrct, GravityDrctInBattleWorld) * player.transform.rotation;
+                player.transform.rotation = Quaternion.FromToRotation(battle_transform.TransformDirection(lastGravityDrct), Physics.gravity) * player.transform.rotation;
             }
             else if (changeMode == ChangingMode.revert)
             {
@@ -104,7 +104,7 @@ public class GravityController : MonoBehaviour
 
         else if ((canChangeGravityInAir || tpc.m_IsGrounded) && getSlideDrctFromAxis(x,y) == slideDrct.upSlide)
         {      
-            targetGravityDrct = getPlayerDrct(player.transform.forward);
+            targetGravityDrct = getPlayerDrct(battle_transform.InverseTransformDirection(player.transform.forward));
             //originGravityDrct = Physics.gravity;
             originGravityDrct = GravityDrctInBattleWorld;
             isChangingGravity = true;
