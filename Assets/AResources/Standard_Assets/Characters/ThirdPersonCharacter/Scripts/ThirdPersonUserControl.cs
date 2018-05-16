@@ -77,7 +77,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 }//player on the floor
                 else
                 {
-                    m_Move = v * Vector3.up + h * Vector3.Normalize(Vector3.Cross(_camForward, Vector3.up));
+                    m_Move = v * Vector3.up + h * _camRight;
                     // m_Move = v * Vector3.up - h * Vector3.Normalize(Vector3.ProjectOnPlane(Vector3.Cross(cam2player, Vector3.up), transform.up));
 
                 }//player on the wall
