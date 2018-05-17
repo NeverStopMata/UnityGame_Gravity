@@ -37,10 +37,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 m_Jump = Input.GetKeyDown(KeyCode.Space) || CrossPlatformInputManager.GetButtonDown("Jump");
             }
-            if( CrossPlatformInputManager.GetButtonDown("Restart"))
-            {
-                Debug.Log("hello restart!");
-            }
         }
 
         // Fixed update is called in sync with physics

@@ -56,7 +56,7 @@ public class GravityController : MonoBehaviour
             CrossPlatformInputManager.SetAxis("Mouse X", 0.0f);
             CrossPlatformInputManager.SetAxis("Mouse Y", 0.0f);
         }
-        Vector3 cam2player = Vector3.Normalize(transform.position - mainCamera_transform.position);
+        GravityDrctInBattleWorld = battle_transform.InverseTransformDirection(Physics.gravity);
         if (isChangingGravity)
         {
             float step = gravityRotateSpeed * Time.deltaTime;
