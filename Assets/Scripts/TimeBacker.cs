@@ -8,6 +8,8 @@ using UnityEngine;
 public class TimeBacker
 {
     private bool isRewinding = false;//用来判断是否需要时光逆流
+    private bool canRecord = true;
+    private bool canRewind = true;
     private float recordTime = 600f;//时光逆流时间
     private Dictionary<GameObject, List<PosRotInf>> PosRotTable;
     private List<Vector3> Gravities;
@@ -30,6 +32,14 @@ public class TimeBacker
             go.GetComponent<Rigidbody>().isKinematic = true;
         }
 
+    }
+
+    public void clearRecord()
+    {
+        foreach (var v in PosRotTable.Values)
+        {
+            v.Clear();
+        }
     }
 
     /// <summary>
@@ -76,22 +86,25 @@ public class TimeBacker
     /// </summary>
     private void Record()
     {
-        foreach (var kv in PosRotTable)
+        if(canRecord)
         {
-            if (kv.Value.Count > Mathf.Round(recordTime / Time.fixedDeltaTime))
+            foreach (var kv in PosRotTable)
             {
-                kv.Value.RemoveAt(kv.Value.Count - 1);
+                if (kv.Value.Count > Mathf.Round(recordTime / Time.fixedDeltaTime))
+                {
+                    kv.Value.RemoveAt(kv.Value.Count - 1);
+                }
+                kv.Value.Insert(0, new PosRotInf(kv.Key.transform.position, kv.Key.transform.rotation));
             }
-            kv.Value.Insert(0, new PosRotInf(kv.Key.transform.position, kv.Key.transform.rotation));
+            if (Gravities.Count > Mathf.Round(recordTime / Time.fixedDeltaTime))
+            {
+                Gravities.RemoveAt(Gravities.Count - 1);
+            }
+            Gravities.Insert(0, Physics.gravity);
         }
-        if (Gravities.Count > Mathf.Round(recordTime / Time.fixedDeltaTime))
-        {
-            Gravities.RemoveAt(Gravities.Count - 1);
-        }
-        Gravities.Insert(0, Physics.gravity);
+        
 
     }
-
 }
 public class PosRotInf
 {

@@ -92,16 +92,16 @@ namespace GoogleARCore.HelloAR
                 Application.Quit();
             }
 
-            //if(CrossPlatformInputManager.GetButtonDown("Restart"))
-            //{
-            //    //Application.Quit();
-            //    m_hasCreateBattle = false;
-            //    TouchControls.SetActive(false);
-            //    if(battleGO != null)
-            //    {
-            //        DestroyImmediate(battleGO);
-            //    }
-            //}
+            if (CrossPlatformInputManager.GetButtonDown("Restart"))
+            {
+                //Application.Quit();
+                m_hasCreateBattle = false;
+                TouchControls.SetActive(false);
+                if (battleGO != null)
+                {
+                    DestroyImmediate(battleGO);
+                }
+            }
             _QuitOnConnectionErrors();
 
             // Check that motion tracking is tracking.
