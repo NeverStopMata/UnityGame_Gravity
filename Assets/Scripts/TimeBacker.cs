@@ -13,7 +13,8 @@ public class TimeBacker
     private float recordTime = 600f;//时光逆流时间
     private Dictionary<GameObject, List<PosRotInf>> PosRotTable;
     private List<Vector3> Gravities;
-    public TimeBacker(List<GameObject> _movableGOs, float _recordTime)
+    private Transform battleTransform;
+    public TimeBacker(List<GameObject> _movableGOs, float _recordTime, Transform _battleTransform)
     {
         PosRotTable = new Dictionary<GameObject, List<PosRotInf>>();
         recordTime = _recordTime;
@@ -22,6 +23,7 @@ public class TimeBacker
             PosRotTable.Add(go, new List<PosRotInf>());
         }
         Gravities = new List<Vector3>();
+        battleTransform = _battleTransform;
     }
 
     public void StartRewind()
@@ -73,9 +75,13 @@ public class TimeBacker
                 kv.Value.RemoveAt(0);
             }
         }
-        if(Gravities.Count>0)
+        if (Gravities.Count > 0)
         {
-            Physics.gravity = Gravities[0];
+
+
+            //Vector3 GravityDrctInBattleWorld = GravityController.getPlayerDrct(battleTransform.InverseTransformDirection(Gravities[0]));
+            //Physics.gravity = battleTransform.TransformDirection(GravityDrctInBattleWorld);//
+            Physics.gravity = Gravities[0];//
             Gravities.RemoveAt(0);
         }
 
@@ -86,7 +92,7 @@ public class TimeBacker
     /// </summary>
     private void Record()
     {
-        if(canRecord)
+        if (canRecord)
         {
             foreach (var kv in PosRotTable)
             {
@@ -102,7 +108,7 @@ public class TimeBacker
             }
             Gravities.Insert(0, Physics.gravity);
         }
-        
+
 
     }
 }

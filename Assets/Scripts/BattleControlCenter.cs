@@ -24,7 +24,7 @@ public class BattleControlCenter : MonoBehaviour
          
         movalbeGOs.AddRange(GameObject.FindGameObjectsWithTag("Player"));
         movalbeGOs.AddRange(GameObject.FindGameObjectsWithTag("Dynamic"));
-        timebacker = new TimeBacker(movalbeGOs, 600f);
+        timebacker = new TimeBacker(movalbeGOs, 600f, transform);
         player = GameObject.FindGameObjectsWithTag("Player")[0];
         playerTransform = player.transform;
         heighOffset = transform.position.y;

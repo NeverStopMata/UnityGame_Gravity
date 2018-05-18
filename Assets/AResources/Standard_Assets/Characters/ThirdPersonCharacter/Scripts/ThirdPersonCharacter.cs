@@ -33,7 +33,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			m_CapsuleCenter = m_Capsule.center;
 
 			m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-            m_GroundCheckDistance = 0.02f;// gameObject.GetComponent<CapsuleCollider>().height * 0.05f * transform.localScale.x;
+            m_GroundCheckDistance = 0.01f;// gameObject.GetComponent<CapsuleCollider>().height * 0.05f * transform.localScale.x;
             m_OrigGroundCheckDistance = m_GroundCheckDistance;
         }
 
@@ -190,12 +190,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson {
 			RaycastHit hitInfo;
 #if UNITY_EDITOR
 			// helper to visualise the ground check ray in the scene view
-			Debug.DrawLine (transform.position + (this.gameObject.transform.up * m_GroundCheckDistance * 0.3f), transform.position - this.gameObject.transform.up * m_GroundCheckDistance);
+			Debug.DrawLine (transform.position + (this.gameObject.transform.up * m_GroundCheckDistance * 1f), transform.position - this.gameObject.transform.up * m_GroundCheckDistance,Color.cyan);
 #endif
 
 			// 0.1f is a small offset to start the ray from inside the character
 			// it is also good to note that the transform position in the sample assets is at the base of the character
-			if (Physics.Raycast (transform.position + (this.gameObject.transform.up * m_GroundCheckDistance * 0.3f), Physics.gravity, out hitInfo, m_GroundCheckDistance * 1.3f)) {
+			if (Physics.Raycast (transform.position + (this.gameObject.transform.up * 0.01f), Physics.gravity, out hitInfo, m_GroundCheckDistance * 1f + 0.01f)) {
 
 				m_GroundNormal = hitInfo.normal;
 				m_IsGrounded = true;

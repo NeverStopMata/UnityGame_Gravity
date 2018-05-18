@@ -25,6 +25,7 @@ public class GravityController : MonoBehaviour
     private enum slideDrct { upSlide, downSlide, leftSlide, righSlide, noSlide }
     private CapsuleCollider plrCapsule;
     private Vector3 GravityDrctInBattleWorld;
+
     // Update is called once per frame
     void Start()
     {
@@ -57,6 +58,8 @@ public class GravityController : MonoBehaviour
             CrossPlatformInputManager.SetAxis("Mouse Y", 0.0f);
         }
         GravityDrctInBattleWorld = battle_transform.InverseTransformDirection(Physics.gravity);
+
+        
         if (isChangingGravity)
         {
             float step = gravityRotateSpeed * Time.deltaTime;
@@ -127,7 +130,7 @@ public class GravityController : MonoBehaviour
         //Debug.Log (targetGravityDrct);
 
     }
-    Vector3 getPlayerDrct(Vector3 originDirection)
+    public static Vector3 getPlayerDrct(Vector3 originDirection)
     {
 
         if (originDirection.x > 0 && Mathf.Abs(originDirection.y) / originDirection.x <= 1 && Mathf.Abs(originDirection.z) / originDirection.x <= 1)
