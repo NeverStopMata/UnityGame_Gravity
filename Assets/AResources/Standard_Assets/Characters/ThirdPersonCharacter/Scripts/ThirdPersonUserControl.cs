@@ -60,12 +60,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 _camRight = m_Cam.right;
                 if (transform.up.y < -0.8f)
                 {
-                    //m_Move = v * Vector3.Normalize(Vector3.ProjectOnPlane(cam2player, transform.up)) - h * Vector3.Normalize(Vector3.ProjectOnPlane(Vector3.Cross(cam2player,Vector3.up), transform.up));
-
-                   
-                    //m_Move = v * Vector3.Normalize(Vector3.Cross(_camRight,cam2player)) - h * _camRight;
                     m_Move = v * Vector3.Normalize(Vector3.Cross(_camRight,_camForward)) + h * _camRight;
-
                 }//player on the ceil
                 else if(transform.up.y > 0.8f)
                 { 
@@ -74,8 +69,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 else
                 {
                     m_Move = v * Vector3.up + h * _camRight;
-                    // m_Move = v * Vector3.up - h * Vector3.Normalize(Vector3.ProjectOnPlane(Vector3.Cross(cam2player, Vector3.up), transform.up));
-
                 }//player on the wall
 
                 //m_Move = v * this.gameObject.transform.forward + h * this.gameObject.transform.right;

@@ -13,19 +13,15 @@ public class Checkpoint : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        battleControlCenter.BeginLevelChange();
-        //TimeBacker _timebacker = GetComponentInParent<BattleControlCenter>().timebacker;
-        //_timebacker.clearRecord();
-        
+        battleControlCenter.BeginLevelChange();      
     }
-    private void OnTriggerStay(Collider collider)
+    void OnTriggerStay(Collider collider)
     {
         battleControlCenter.SwitchLevel();
         
     }
     void OnTriggerExit(Collider collider)
     {
-        //TimeBacker _timebacker = GetComponentInParent<BattleControlCenter>().timebacker;
         battleControlCenter.EndLevelChange();
     }
 }

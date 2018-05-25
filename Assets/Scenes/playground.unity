@@ -1516,6 +1516,33 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 118769061}
+    - target: {fileID: 108989070709991692, guid: 96fa11973c6cf2f46912e40872c225d5,
+        type: 2}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 108989070709991692, guid: 96fa11973c6cf2f46912e40872c225d5,
+        type: 2}
+      propertyPath: m_Shadows.m_Resolution
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 23867609661543246, guid: 96fa11973c6cf2f46912e40872c225d5,
+        type: 2}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4074070265191898, guid: 96fa11973c6cf2f46912e40872c225d5, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4074070265191898, guid: 96fa11973c6cf2f46912e40872c225d5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4074070265191898, guid: 96fa11973c6cf2f46912e40872c225d5, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 96fa11973c6cf2f46912e40872c225d5, type: 2}
   m_IsPrefabParent: 0
@@ -1524,7 +1551,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh20160
+  m_Name: pb_Mesh-30900
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
