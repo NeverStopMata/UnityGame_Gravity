@@ -10,20 +10,20 @@ public class BattleControlCenter : MonoBehaviour
     public float plrHeightBattleWorld = 0.5f;//battle坐标系下的人体合适高度
     private float heighOffset;
     public float switchLevelSpeed = 0.1f;
-    private List<GameObject> movalbeGOs;
+    private List<Transform> movalbeGOs;
     public TimeBacker timebacker;
     private GameObject player;
     private Transform playerTransform;
-    private bool isSwitchingLevel = false;
+    public bool isSwitchingLevel = false;
 
 
     // Use this for initialization
     void Start()
     {
-        movalbeGOs = new List<GameObject>();
-         
-        movalbeGOs.AddRange(GameObject.FindGameObjectsWithTag("Player"));
-        movalbeGOs.AddRange(GameObject.FindGameObjectsWithTag("Dynamic"));
+        movalbeGOs = new List<Transform>();
+        movalbeGOs.AddRange(this.transform.GetComponentsInChildren<Transform>());
+        //movalbeGOs.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+       // movalbeGOs.AddRange(GameObject.FindGameObjectsWithTag("Dynamic"));
         timebacker = new TimeBacker(movalbeGOs, 600f, transform);
         player = GameObject.FindGameObjectsWithTag("Player")[0];
         playerTransform = player.transform;
@@ -43,6 +43,10 @@ public class BattleControlCenter : MonoBehaviour
 
     public void SwitchLevel()
     {
+        if(CrossPlatformInputManager.GetButton("Timeback"))
+        {
+            return;
+        }
         float heightOffsetRealityWorld = plrHeightBattleWorld + heighOffset;
         if (playerTransform.position.y > heightOffsetRealityWorld)
         {
@@ -74,19 +78,19 @@ public class BattleControlCenter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CrossPlatformInputManager.GetButtonDown("Timeback") && !isSwitchingLevel)
+        if (CrossPlatformInputManager.GetButtonDown("Timeback"))
         {
             timebacker.StartRewind();
         }
         //松开时停止
-        if (CrossPlatformInputManager.GetButtonUp("Timeback") && !isSwitchingLevel)
+        if (CrossPlatformInputManager.GetButtonUp("Timeback"))
         {
             timebacker.StopRewind();
         }
     }
     private void FixedUpdate()
     {
-        if(!isSwitchingLevel)
+        //if(!isSwitchingLevel)
         {
             timebacker.Execution();
         }

@@ -25,7 +25,7 @@ public class GravityController : MonoBehaviour
     private enum slideDrct { upSlide, downSlide, leftSlide, righSlide, noSlide }
     private CapsuleCollider plrCapsule;
     private Vector3 GravityDrctInBattleWorld;
-
+    private BattleControlCenter battleControlCentor;
     // Update is called once per frame
     void Start()
     {
@@ -42,6 +42,7 @@ public class GravityController : MonoBehaviour
         {
             mainCamera_transform = GameObject.FindGameObjectWithTag("MainCamera").transform;
         }
+        battleControlCentor = GameObject.FindGameObjectWithTag("Battle").GetComponent<BattleControlCenter>();
 
         plrCapsule = gameObject.GetComponent<CapsuleCollider>();
         //dsada
@@ -104,7 +105,10 @@ public class GravityController : MonoBehaviour
             //Debug.Log (player.transform.up);
 
         }
-
+        else if(battleControlCentor.isSwitchingLevel)
+        {
+            //do nothing.
+        }
         else if ((canChangeGravityInAir || tpc.m_IsGrounded) && getSlideDrctFromAxis(x,y) == slideDrct.upSlide)
         {      
             targetGravityDrct = getPlayerDrct(battle_transform.InverseTransformDirection(player.transform.forward));

@@ -2288,7 +2288,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1412726156836770}
   m_LocalRotation: {x: 0.14034446, y: -0.821062, z: 0.24020089, w: 0.49846172}
-  m_LocalPosition: {x: 1.2342478, y: 2.5284274, z: 4.6577706}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7586443, y: 0.75864434, z: 0.75864434}
   m_Children: []
   m_Father: {fileID: 4993864029946316}
@@ -3530,7 +3530,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1336376680537742}
   m_LocalRotation: {x: -0, y: -0.98532027, z: -0, w: -0.17071618}
-  m_LocalPosition: {x: 0.151, y: 1.453, z: 2.3272}
+  m_LocalPosition: {x: 0.719, y: 1.01, z: 0.135}
   m_LocalScale: {x: 0.09871924, y: 0.09871924, z: 0.09871924}
   m_Children:
   - {fileID: 4387984268836164}
@@ -5040,7 +5040,7 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1481566475935538}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -6406,6 +6406,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plrHeightBattleWorld: 0.5
   switchLevelSpeed: 0.1
+  isSwitchingLevel: 0
 --- !u!114 &114191744178224462
 MonoBehaviour:
   m_ObjectHideFlags: 1
