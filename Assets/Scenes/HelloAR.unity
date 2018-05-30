@@ -274,7 +274,7 @@ GameObject:
   m_PrefabParentObject: {fileID: 1860535340798186, guid: a2dc0566db25e564f8872b2f3f52cc59,
     type: 2}
   m_PrefabInternal: {fileID: 135382411}
---- !u!1001 &350941766
+--- !u!1001 &615819231
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -371,16 +371,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 114604214749850088, guid: 2ea2fd0077a1d5945a047e0acdbf9c6c,
-        type: 2}
-      propertyPath: m_Color.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114604214749850088, guid: 2ea2fd0077a1d5945a047e0acdbf9c6c,
-        type: 2}
-      propertyPath: m_RaycastTarget
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1678587746086612, guid: 2ea2fd0077a1d5945a047e0acdbf9c6c, type: 2}
       propertyPath: m_IsActive
       value: 0
@@ -451,7 +441,7 @@ GameObject:
 GameObject:
   m_PrefabParentObject: {fileID: 1678587746086612, guid: 2ea2fd0077a1d5945a047e0acdbf9c6c,
     type: 2}
-  m_PrefabInternal: {fileID: 350941766}
+  m_PrefabInternal: {fileID: 615819231}
 --- !u!20 &896679035 stripped
 Camera:
   m_PrefabParentObject: {fileID: 20155940112608238, guid: c10877f7cd5764de18d46d7b777d1faa,
@@ -461,7 +451,7 @@ Camera:
 RectTransform:
   m_PrefabParentObject: {fileID: 224031370919156710, guid: 2ea2fd0077a1d5945a047e0acdbf9c6c,
     type: 2}
-  m_PrefabInternal: {fileID: 350941766}
+  m_PrefabInternal: {fileID: 615819231}
 --- !u!1 &1233457656
 GameObject:
   m_ObjectHideFlags: 0

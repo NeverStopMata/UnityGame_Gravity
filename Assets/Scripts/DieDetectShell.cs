@@ -14,7 +14,10 @@ public class DieDetectShell : MonoBehaviour
 
     void OnTriggerExit(Collider collider)
     {
-        mainControlCenter.FinishGame(false);
+        if (collider.gameObject.tag == "Player")
+        {
+            mainControlCenter.FinishGame(false);
+        }
     }
 
 }

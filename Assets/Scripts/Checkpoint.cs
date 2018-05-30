@@ -13,15 +13,27 @@ public class Checkpoint : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        battleControlCenter.BeginLevelChange();      
+        if (collider.gameObject.tag == "Player")
+        {
+            battleControlCenter.BeginLevelChange();
+        }
+                  
     }
     void OnTriggerStay(Collider collider)
     {
-        battleControlCenter.SwitchLevel();
+        if (collider.gameObject.tag == "Player")
+        {
+            battleControlCenter.SwitchLevel();
+        }
+            
         
     }
     void OnTriggerExit(Collider collider)
     {
-        battleControlCenter.EndLevelChange();
+        if (collider.gameObject.tag == "Player")
+        {
+            battleControlCenter.EndLevelChange();
+        }
+            
     }
 }

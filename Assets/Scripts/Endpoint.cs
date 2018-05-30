@@ -14,7 +14,11 @@ public class Endpoint : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        mainControlCenter.FinishGame(true);
+        if(collider.gameObject.tag == "Player")
+        {
+            mainControlCenter.FinishGame(true);
+        }
+        
     }
     //void OnTriggerStay(Collider collider)
     //{
