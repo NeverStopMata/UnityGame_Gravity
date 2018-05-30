@@ -20,6 +20,7 @@
 
 namespace GoogleARCore.HelloAR
 {
+    using System;
     using System.Collections.Generic;
     using GoogleARCore;
     using UnityEngine;
@@ -36,6 +37,7 @@ namespace GoogleARCore.HelloAR
     /// </summary>
     public class HelloARController : MonoBehaviour
     {
+        enum DisplayState { start, playing, succeed, fail };
         /// <summary>
         /// The first-person camera being used to render the passthrough camera image (i.e. AR background).
         /// </summary>
@@ -55,7 +57,9 @@ namespace GoogleARCore.HelloAR
         /// A gameobject parenting UI for displaying the "searching for planes" snackbar.
         /// </summary>
         //public GameObject SearchingForPlaneUI;
-
+        public GameObject InitUI;
+        public GameObject FailUI;
+        public GameObject SucceedUI;
         public GameObject TouchControls;
         /// <summary>
         /// A list to hold new planes ARCore began tracking in the current frame. This object is used across
@@ -75,14 +79,56 @@ namespace GoogleARCore.HelloAR
         private bool m_IsQuitting = false;
         private bool m_hasCreateBattle = false;
         private GameObject battleGO;
-
+        private DisplayState _displaystate;
         /// <summary>
         /// The Unity Update() method.
         /// 
         /// </summary>
         private void Start()
         {
-            TouchControls.SetActive(false);
+            SetUIActive(DisplayState.start);
+        }
+        private void SetUIActive(DisplayState distate)
+        {
+            _displaystate = distate;
+            if (distate == DisplayState.playing)
+            {
+                //TouchControls.SetActive(false);
+                InitUI.SetActive(false);
+                //SucceedUI.SetActive(false);
+                FailUI.SetActive(false);
+            }
+            else if (distate == DisplayState.start)
+            {
+                //TouchControls.SetActive(false);
+                InitUI.SetActive(true);
+                //SucceedUI.SetActive(false);
+                //FailUI.SetActive(false);
+            }
+            else if (distate == DisplayState.fail)
+            {
+                //TouchControls.SetActive(false);
+                //InitUI.SetActive(false);
+                //SucceedUI.SetActive(false);
+                FailUI.SetActive(true);
+            }
+            else if (distate == DisplayState.succeed)
+            {
+                TouchControls.SetActive(false);
+                //InitUI.SetActive(false);
+                SucceedUI.SetActive(true);
+                //FailUI.SetActive(false);
+            }
+
+        }
+        public void beginPlaying()
+        {
+            m_hasCreateBattle = false;
+            if (battleGO != null)
+            {
+                DestroyImmediate(battleGO);
+            }
+            SetUIActive(DisplayState.playing);
         }
         public void Update()
         {
@@ -161,11 +207,11 @@ namespace GoogleARCore.HelloAR
             if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit) && !m_hasCreateBattle)
             {
                 battleGO = Instantiate(AndyAndroidPrefab, hit.Pose.position, hit.Pose.rotation);
-                
+
                 // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
                 // world evolves.
                 var anchor = hit.Trackable.CreateAnchor(hit.Pose);
-                
+
                 // Andy should look at the camera but still be flush with the plane.
                 if ((hit.Flags & TrackableHitFlags.PlaneWithinPolygon) != TrackableHitFlags.None)
                 {
@@ -182,8 +228,11 @@ namespace GoogleARCore.HelloAR
                 battleGO.transform.parent = anchor.transform;
                 m_hasCreateBattle = true;
                 TouchControls.SetActive(true);
+
                 //dualTouchControls = (GameObject)Instantiate(Resources.Load("Standard_Assets/CrossPlatformInput/Prefabs/DualTouchControls"));
+
             }
+
         }
 
         /// <summary>
@@ -237,6 +286,18 @@ namespace GoogleARCore.HelloAR
                         message, 0);
                     toastObject.Call("show");
                 }));
+            }
+        }
+
+        public void FinishGame(bool isSucceed)
+        {
+            if (isSucceed)
+            {
+                SetUIActive(DisplayState.succeed);
+            }
+            else
+            {
+                SetUIActive(DisplayState.fail);
             }
         }
     }

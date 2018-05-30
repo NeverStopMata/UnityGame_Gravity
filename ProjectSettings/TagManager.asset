@@ -8,6 +8,7 @@ TagManager:
   - Battle
   - Dynamic
   - Checkpoint
+  - MainController
   layers:
   - Default
   - TransparentFX

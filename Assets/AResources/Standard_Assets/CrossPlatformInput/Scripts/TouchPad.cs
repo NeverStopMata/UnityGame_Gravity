@@ -86,16 +86,17 @@ namespace UnityStandardAssets.CrossPlatformInput
 		void UpdateVirtualAxes(Vector3 value)
 		{
 			value = value.normalized;
-			if (m_UseX)
-			{
-				m_HorizontalVirtualAxis.Update(value.x);
-			}
 
-			if (m_UseY)
-			{
-				m_VerticalVirtualAxis.Update(value.y);
-			}
-		}
+            if (m_UseX)
+            {
+                m_HorizontalVirtualAxis.Update(value.x);
+            }
+
+            if (m_UseY)
+            {
+                m_VerticalVirtualAxis.Update(value.y);
+            }
+        }
 
 
 		public void OnPointerDown(PointerEventData data)
@@ -110,31 +111,32 @@ namespace UnityStandardAssets.CrossPlatformInput
 
 		void Update()
 		{
-			if (!m_Dragging)
-			{
-				return;
-			}
-			if (Input.touchCount >= m_Id + 1 && m_Id != -1)
-			{
+            if (!m_Dragging)
+            {
+                return;
+            }
+            if (Input.touchCount >= m_Id + 1 && m_Id != -1)
+            {
 #if !UNITY_EDITOR
 
-            if (controlStyle == ControlStyle.Swipe)
-            {
-                m_Center = m_PreviousTouchPos;
-                m_PreviousTouchPos = Input.touches[m_Id].position;
-            }
-            Vector2 pointerDelta = new Vector2(Input.touches[m_Id].position.x - m_Center.x , Input.touches[m_Id].position.y - m_Center.y).normalized;
-            pointerDelta.x *= Xsensitivity;
-            pointerDelta.y *= Ysensitivity;
+                        if (controlStyle == ControlStyle.Swipe)
+                        {
+                            m_Center = m_PreviousTouchPos;
+                            m_PreviousTouchPos = Input.touches[m_Id].position;
+                        }
+                        Vector2 pointerDelta = new Vector2(Input.touches[m_Id].position.x - m_Center.x , Input.touches[m_Id].position.y - m_Center.y).normalized;
+                        pointerDelta.x *= Xsensitivity;
+                        pointerDelta.y *= Ysensitivity;
 #else
-				Vector2 pointerDelta;
-				pointerDelta.x = Input.mousePosition.x - m_PreviousMouse.x;
-				pointerDelta.y = Input.mousePosition.y - m_PreviousMouse.y;
-				m_PreviousMouse = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
+                Vector2 pointerDelta;
+                pointerDelta.x = Input.mousePosition.x - m_PreviousMouse.x;
+                pointerDelta.y = Input.mousePosition.y - m_PreviousMouse.y;
+                m_PreviousMouse = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
 #endif
-				UpdateVirtualAxes(new Vector3(pointerDelta.x, pointerDelta.y, 0));
-			}
-		}
+                UpdateVirtualAxes(new Vector3(pointerDelta.x, pointerDelta.y, 0));
+                //UpdateVirtualAxes(new Vector3(1, 1, 0));
+            }
+        }
 
 
 		public void OnPointerUp(PointerEventData data)
@@ -146,11 +148,11 @@ namespace UnityStandardAssets.CrossPlatformInput
 
 		void OnDisable()
 		{
-			if (CrossPlatformInputManager.AxisExists(horizontalAxisName))
-				CrossPlatformInputManager.UnRegisterVirtualAxis(horizontalAxisName);
+            if (CrossPlatformInputManager.AxisExists(horizontalAxisName))
+                CrossPlatformInputManager.UnRegisterVirtualAxis(horizontalAxisName);
 
-			if (CrossPlatformInputManager.AxisExists(verticalAxisName))
-				CrossPlatformInputManager.UnRegisterVirtualAxis(verticalAxisName);
-		}
+            if (CrossPlatformInputManager.AxisExists(verticalAxisName))
+                CrossPlatformInputManager.UnRegisterVirtualAxis(verticalAxisName);
+        }
 	}
 }
